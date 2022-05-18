@@ -8,17 +8,17 @@ app = Flask(__name__)
 
 @app.route("/api/scrape_bwin", methods=["GET"])
 def api_scrape_bwin():
-    driver = bwin_scraper.start_browser('https://sports.bwin.com/en/sports/live/football-4?fallback=false')
+    driver = bwin_scraper.start_browser('https://meridianbet.co.tz/en/betting/football')
     bwin_scraper.close_popup(driver)
     bwin_scraper.accept_cookies(driver)
-    bwin_scraper.choose_value_from_dropdown(driver)
+    #bwin_scraper.choose_value_from_dropdown(driver)
     btts, teams = bwin_scraper.scrape_odds(driver)
     dict_gambling = bwin_scraper.store_odds(teams, btts)
     return jsonify(dict_gambling)
 
 @app.route("/api/scrape_betfair", methods=["GET"])
 def api_scrape_betfair():
-    driver = betfair_scraper.start_browser('https://www.betfair.com/sport/inplay')
+    driver = betfair_scraper.start_browser('https://www.betpawa.co.tz/upcoming/2/BTTS')
     betfair_scraper.accept_cookies(driver)
     betfair_scraper.choose_value_from_dropdown(driver)
     btts, teams = betfair_scraper.scrape_odds(driver)

@@ -12,22 +12,22 @@ def index():
 
 @app.route("/scrape_bwin", methods=["GET"])
 def scrape_bwin():
-    driver = bwin_scraper.start_browser('https://sports.bwin.com/en/sports/live/football-4?fallback=false')
+    driver = bwin_scraper.start_browser('https://meridianbet.co.tz/en/betting/football')
     bwin_scraper.close_popup(driver)
     bwin_scraper.accept_cookies(driver)
-    bwin_scraper.choose_value_from_dropdown(driver)
+    #bwin_scraper.choose_value_from_dropdown(driver)
     btts, teams = bwin_scraper.scrape_odds(driver)
     bwin_odds = bwin_scraper.store_odds(teams, btts)
-    return render_template("scrape.html", odds=bwin_odds, website='Bwin')
+    return render_template("scrape.html", odds=bwin_odds, website='Mkekabet')
 
 @app.route("/scrape_betfair", methods=["GET"])
 def scrape_betfair():
-    driver = betfair_scraper.start_browser('https://www.betfair.com/sport/inplay')
+    driver = betfair_scraper.start_browser('https://www.betpawa.co.tz/upcoming/2/BTTS')
     betfair_scraper.accept_cookies(driver)
     betfair_scraper.choose_value_from_dropdown(driver)
     btts, teams = betfair_scraper.scrape_odds(driver)
     betfair_odds = betfair_scraper.store_odds(teams, btts)
-    return render_template("scrape.html", odds=betfair_odds, website='Betfair')
+    return render_template("scrape.html", odds=betfair_odds, website='BetPawa')
 
 @app.route("/calc_surebets", methods=["GET"])
 def calc_surebets():

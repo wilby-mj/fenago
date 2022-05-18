@@ -33,30 +33,37 @@ def accept_cookies(driver):
     except:
         pass
 
-def choose_value_from_dropdown(driver):
-    try:
-        dropdown_1 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="main-view"]/ms-live/ms-live-event-list/div/ms-grid/ms-grid-header/div/ms-group-selector[1]/ms-dropdown/div')))
-        dropdown_1.click()
-        dropdown_1.find_element_by_xpath('//*[@id="main-view"]/ms-live/ms-live-event-list/div/ms-grid/ms-grid-header/div/ms-group-selector[1]/ms-dropdown/div[2]/div[10]').click()
-    except:
-        pass
+#def choose_value_from_dropdown(driver):
+#    try:
+#        marketDropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//select[@id="ddn_upcomingmarkets"]//following-sibling::option[2]')))
+#        marketDropdown.click()
+#        #dropdown_1.find_element_by_xpath('//option[@value="GG"]').click()
+#    except:                              
+#        pass
 
 def scrape_odds(driver):
     btts, teams = [], []
-    box = driver.find_element_by_xpath('//ms-grid[contains(@sortingtracking,"Live")]') 
-    rows = WebDriverWait(box, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'grid-event')))
+    box = driver.find_element_by_xpath('//div[@id="events"]') 
+    rows = WebDriverWait(box, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'event.ng-star-inserted')))
 
     for row in rows:
-        odds = row.find_elements_by_class_name('grid-option-group')
-        try:
-            empty_events = row.find_elements_by_class_name('empty') #removing empty odds
-            odd = odds[0] if odds[0] not in empty_events else ''
-        except:
-            pass
-        if(odd):
-            btts.append(odd.text)
-            grandparent = odd.find_element_by_xpath('./..').find_element_by_xpath('./..')
-            teams.append(grandparent.find_element_by_class_name('grid-event-name').text)
+        odds = row.find_element_by_xpath('//div[@class="game g2 ng-star-inserted"]')
+        btts.append(odds.text)
+        home = row.find_element_by_xpath('.//div[@class="home"]')
+        away = row.find_element_by_xpath('.//div[@class="away"]')
+        teams.append(home.text + '\n' + away.text)
+
+    #for row in rows:
+        ##odds = row.find_elements_by_class_name('grid-option-group')
+        #try:
+        #    empty_events = row.find_elements_by_class_name('empty') #removing empty odds
+        #    odd = odds[0] if odds[0] not in empty_events else ''
+        #except:
+        #    pass
+        #if(odd):
+        #    btts.append(odd.text)
+        #    grandparent = odd.find_element_by_xpath('./..').find_element_by_xpath('./..')
+        #    teams.append(grandparent.find_element_by_class_name('grid-event-name').text)
 
     driver.quit()
     return btts, teams

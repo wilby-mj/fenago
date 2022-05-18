@@ -17,7 +17,7 @@ def start_browser(url):
 
     driver = webdriver.Firefox(options=options)
     driver.get(url)
-    time.sleep(5)
+    #time.sleep(5)
     return driver
 
 def accept_cookies(driver):
@@ -29,28 +29,27 @@ def accept_cookies(driver):
         pass
 
 def choose_value_from_dropdown(driver):
-    market = 'Both teams to Score?'
     try:
-        dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'dropdown-1')))
+        dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//li[contains(@data-test-id,"BTTS_FT")]')))
         dropdown.click()
-        time.sleep(5)
-        chooser = WebDriverWait(dropdown, 5).until(EC.element_to_be_clickable((By.XPATH, '//*[contains(text(),'+'"'+str(market)+'"'+')]')))
-        chooser.click()
-        time.sleep(5)
+        #time.sleep(5)
+        #chooser = WebDriverWait(dropdown, 5).until(EC.element_to_be_clickable((By.XPATH, '//*[contains(text(),'+'"'+str(market)+'"'+')]')))
+        #chooser.click()
+        #time.sleep(5)
     except:
         pass
 
 def scrape_odds(driver):
     list_odds, teams = [], []
-    time.sleep(10)
-    box = driver.find_element_by_xpath('//div[contains(@data-sport-id,"1")]') #livebox -> diferent sports //  #upcoming = comingup
-    rows = WebDriverWait(box, 5).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'com-coupon-line')))
+    #time.sleep(10)
+    box = driver.find_element_by_xpath('//div[contains(@class,"tabs-content")]')
+    rows = WebDriverWait(box, 5).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'events-container.prematch')))
     for row in rows:
-        odds = row.find_element_by_xpath('.//div[contains(@class, "runner-list")]')
+        odds = row.find_element_by_xpath('.//div[contains(@class, "event-bets")]')
         list_odds.append(odds.text)
-        home = row.find_element_by_class_name('home-team-name').text
-        away = row.find_element_by_class_name('away-team-name').text
-        teams.append(home + '\n' + away)
+        home = row.find_element_by_xpath('.//div/p[@class="title team"][1]')
+        away = row.find_element_by_xpath('.//p[@class="title team"][2]')
+        teams.append(home.text + '\n' + away.text)
 
     driver.quit()
     return list_odds, teams
