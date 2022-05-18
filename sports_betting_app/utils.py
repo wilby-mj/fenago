@@ -13,7 +13,7 @@ def read_dataframes(path_1, path_2):
     df_betfair = pickle.load(open(path_2,'rb'))
     df_betfair = df_betfair.replace(r'', '0\n0', regex=True)
     df_betfair = df_betfair.replace(r'^\d+\.\d+$', '0\n0', regex=True)
-    #df_betfair = df_betfair.replace(r'[Yes|No]', '', regex=True)
+    df_betfair = df_betfair.replace(r'[Yes|No]', '0', regex=True)
     return df_bwin, df_betfair
 
 
