@@ -18,7 +18,7 @@ def scrape_bwin():
     #bwin_scraper.choose_value_from_dropdown(driver)
     btts, teams = bwin_scraper.scrape_odds(driver)
     bwin_odds = bwin_scraper.store_odds(teams, btts)
-    return render_template("scrape.html", odds=bwin_odds, website='Mkekabet')
+    return render_template("scrape.html", odds=bwin_odds, website='MeridianBet')
 
 @app.route("/scrape_betfair", methods=["GET"])
 def scrape_betfair():
